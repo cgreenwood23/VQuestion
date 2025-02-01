@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>????</title>
+    <script src="https://cdn.tailwindcss.com"></script> <!-- Tailwind CSS for styling -->
+    <style>
+        /* Background gradient effect */
+        .gradient-background {
+            background: linear-gradient(180deg, rgba(106, 173, 239, 1) 0%, rgb(148, 196, 243) 36%, rgba(255, 255, 255, 1) 100%);
+        }
+
+        /* Bounce animation for the Yes button */
+        .bounce2 {
+            animation: bounce2 2s ease infinite;
+        }
+
+        @keyframes bounce2 {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-20px);
+            }
+            60% {
+                transform: translateY(-10px);
+            }
+        }
+    </style>
+</head>
+<body class="gradient-background">
+    <div class="flex items-center justify-center h-screen"> 
+        <div class="flex flex-col items-center p-4">
+            <!-- Image that changes based on user interaction -->
+            <img id="imageDisplay" src="./image1.png" class="rounded-md h-[375px]" />
+
+            <!-- Main question -->
+            <h2 id="valentineQuestion" class="text-5xl font-mono italic text-[#212121] my-4">
+                Will you be my Valentine?
+            </h2>
+
+            <!-- Yes and No buttons -->
+            <div class="flex gap-4 pt-[20px] items-center" id="responseButtons">
+                <!-- Yes button with heart icon -->
+                <button id="yesButton"
+                    class="bounce2 inline-flex items-center justify-center rounded-full p-0 text-[30px] font-medium text-pink-500 transition relative"
+                    style="width: 128px; height: 128px;">
+                    <svg id="heartIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-32 h-32 text-pink-500 hover:text-pink-400">
+                        <path d="m11.645 20.91-.007-.003-.022-.012a15.247 15.247 0 0 1-.383-.218 25.18 25.18 0 0 1-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0 1 12 5.052 5.5 5.5 0 0 1 16.313 3c2.973 0 5.437 2.322 
+                        5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 0 1-4.244 3.17 15.247 15.247 0 0 1-.383.219l-.022.012-.007.004-.003.001a.752.752 0 0 1-.704 0l-.003-.001Z" />
+                    </svg>
+                    <span id="yesText" class="absolute text-[30px] text-white">Yes</span>
+                </button>
+
+                <!-- No button -->
+                <button id="noButton"
+                    class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-[20px] font-medium transition hover:bg-red-700 h-12 min-w-[75px] w-auto px-4 py-2 bg-red-500 text-white">
+                    No
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import confetti from 'https://cdn.skypack.dev/canvas-confetti'; // Import confetti effect
+
+        // Get references to elements
+        const yesButton = document.getElementById('yesButton');
+        const heartIcon = document.getElementById('heartIcon');
+        const yesText = document.getElementById('yesText');
+        const noButton = document.getElementById('noButton');
+        const imageDisplay = document.getElementById('imageDisplay');
+        const valentineQuestion = document.getElementById('valentineQuestion');
+        const responseButtons = document.getElementById('responseButtons');
+
+        let noClickCount = 0; // Track number of No button clicks
+        let heartSize = 128; // Initial size of Yes button
+        let fontSize = 30; // Initial font size
+
+        // Array of images that change on No clicks
+        const imagePaths = [
+            "./image1.png", "./image1.png", "./image1.png",
+            "./image1.png", "./image1.png", "./image1.png",
+            "./gif1.gif"
+        ];
+
+        // Messages for the No button
+        const messages = [
+            "No", "Are you sure?", "Really sure?", "Pookie... please",
+            "Last chance to change your mind!", "You're making a super big mistake! -.-",
+            "I can feel my heart breaking!", "Crying myself to sleep..."
+        ];
+
+        // Handle No button click event
+        noButton.addEventListener('click', function() {
+            if (noClickCount < imagePaths.length) {
+                // Change image based on the number of clicks
+                imageDisplay.src = imagePaths[noClickCount++];
+                
+                // Increase Yes button size and font size
+                heartSize += 18;
+                fontSize += 4;
+
+                yesButton.style.width = `${heartSize}px`;
+                yesButton.style.height = `${heartSize}px`;
+                heartIcon.style.width = `${heartSize}px`;
+                heartIcon.style.height = `${heartSize}px`;
+                yesText.style.fontSize = `${fontSize}px`;
+
+                // Change No button text
+                if (noClickCount < messages.length) {
+                    noButton.textContent = messages[noClickCount];
+                }
+            }
+        });
+
+        // Handle Yes button click event
+        yesButton.addEventListener('click', () => {
+            // Change image and message on Yes click
+            imageDisplay.src = './gif2.gif'; 
+            valentineQuestion.textContent = "YAY! Best Roommate Ever ;)";
+            responseButtons.style.display = 'none';
+            confetti();
+        });
+    </script>
+</body>
+</html>
